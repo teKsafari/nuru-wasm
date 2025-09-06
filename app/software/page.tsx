@@ -20,7 +20,7 @@ export default function SoftwarePage() {
           Tengeneza Program kwa lugha mama - Nuru!
         </p>
         
-        <div className="p-1 border-[0.5px] border-accent/100 w-full h-[calc(100vh-200px)] rounded-lg overflow-hidden shadow-[0_10px_30px_rgba(255,154,0,0.25)]">
+        <div className="p-1. border-[0.5px] border-accent/100 w-full h-[calc(100vh-200px)] rounded-lg overflow-hidden shadow-[0_10px_30px_rgba(255,154,0,0.25)]/">
           <iframe 
             src="https://nuru-playground.vercel.app/" 
             className="w-full h-full rounded-md"

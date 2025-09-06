@@ -6,7 +6,7 @@ export default function ElectronicsPage() {
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-foreground">Electronics Playground</h1>
         <p className="mb-8 text-muted-foreground">
-          Program electronics using your favorite language - Nuru !
+          Andika kodi ya vifaa vya elektroniki kwa lugha unayopenda zaidi - Nuru!
         </p>
         <ElectronicsSimulator />
       </div>

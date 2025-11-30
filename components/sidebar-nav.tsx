@@ -40,7 +40,7 @@ export function SidebarNav() {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="https://github.com/teksafari/nuru-playground"
+          href="https://github.com/NuruProgramming"
           className="flex flex-col items-center justify-center w-12 h-12 rounded-md transition-colors hover:bg-muted text-muted-foreground hover:text-foreground"
           title="Nuru GitHub Repository"
         >

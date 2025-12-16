@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { CircuitBoard, Code2, Home, Sprout, Github } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { CircuitBoard, Code2, Sprout, Github } from "lucide-react";
 import Link from "next/link";
 import { AppLogo } from "./app-logo";
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const router = useRouter();
 
   const navItems = [
     {
@@ -52,7 +51,7 @@ export function SidebarNav() {
 
         <div className="w-8 h-[0.1px] bg-muted-foreground mb-4 rounded-full"></div>
 
-        {navItems.map((item, index) => (
+        {navItems.map((item) => (
           <React.Fragment key={item.href}>
             <Link
               href={item.href}

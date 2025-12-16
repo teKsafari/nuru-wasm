@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CircuitBoard, Code2 } from "lucide-react";
 import { AppLogo } from "@/components/app-logo";
+import { PixelCanvas } from "@/components/ui/pixel-canvas";
 
 export default function Home() {
 	return (
@@ -22,32 +23,48 @@ export default function Home() {
 					wanayoizungumza nyumbani. <br />
 				</p>
 
-				<div className="flex max-w-2xl flex-col justify-center gap-6 md:flex-row">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2 max-w-2xl w-full mx-auto">
 					<Link
 						href="/electronics"
-						className="logo-pulse group flex flex-1 flex-col items-center justify-center gap-4 rounded-lg border p-10 text-accent-foreground transition-all hover:bg-accent hover:shadow-lg"
+						className="group relative w-full overflow-hidden border border-border rounded-[24px] md:rounded-[32px] min-h-[200px] md:min-h-[300px] flex flex-col items-center justify-center transition-colors duration-200 hover:border-orange-500 hover:shadow-lg"
+						style={{ "--active-color": "#f97316" } as React.CSSProperties}
 					>
-						<CircuitBoard
-							size={24}
-							className="transform transition-transform group-hover:scale-[1.3]"
+						<PixelCanvas
+							gap={10}
+							speed={25}
+							colors={["#ffedd5", "#fb923c", "#f97316"]}
+							variant="icon"
 						/>
-						<div>
-							<div className="text-lg font-bold">Electronics Playground</div>
-							<div className="text-sm italic">Program Hardware</div>
+						<div className="relative z-10 flex flex-col items-center justify-center gap-3 md:gap-4 p-4 md:p-6 text-center">
+							<CircuitBoard
+								className="w-10 h-10 md:w-12 md:h-12 text-muted-foreground transition-all duration-300 ease-out group-hover:scale-110 group-hover:text-[var(--active-color)]"
+							/>
+							<div className="space-y-1">
+								<h3 className="text-lg md:text-xl font-bold font-mono group-hover:text-[var(--active-color)] transition-colors">Electronics Playground</h3>
+								<p className="text-sm text-muted-foreground italic">Program Hardware</p>
+							</div>
 						</div>
 					</Link>
 
 					<Link
-						href={"/software"}
-						className="group flex w-full flex-1 flex-col items-center justify-center gap-4 rounded-lg border border-accent p-10 transition-all hover:bg-accent hover:shadow-lg"
+						href="/software"
+						className="group relative w-full overflow-hidden border border-border rounded-[24px] md:rounded-[32px] min-h-[200px] md:min-h-[300px] flex flex-col items-center justify-center transition-colors duration-200 hover:border-[#0ea5e9] hover:shadow-lg"
+						style={{ "--active-color": "#0ea5e9" } as React.CSSProperties}
 					>
-						<Code2
-							size={24}
-							className="transform transition-transform group-hover:scale-[1.3]"
+						<PixelCanvas
+							gap={10}
+							speed={25}
+							colors={["#e0f2fe", "#7dd3fc", "#0ea5e9"]}
+							variant="icon"
 						/>
-						<div>
-							<div className="text-lg font-bold">Software Playground </div>
-							<div className="text-sm italic">Build Software Programs</div>
+						<div className="relative z-10 flex flex-col items-center justify-center gap-3 md:gap-4 p-4 md:p-6 text-center">
+							<Code2
+								className="w-10 h-10 md:w-12 md:h-12 text-muted-foreground transition-all duration-300 ease-out group-hover:scale-110 group-hover:text-[var(--active-color)]"
+							/>
+							<div className="space-y-1">
+								<h3 className="text-lg md:text-xl font-bold font-mono group-hover:text-[var(--active-color)] transition-colors">Software Playground</h3>
+								<p className="text-sm text-muted-foreground italic">Build Software Programs</p>
+							</div>
 						</div>
 					</Link>
 				</div>

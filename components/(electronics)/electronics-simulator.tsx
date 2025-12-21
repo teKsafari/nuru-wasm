@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle, Play, Square } from "lucide-react";
+import { AlertCircle, Play,  Square, LightbulbIcon, Paintbrush } from "lucide-react";
+import {} from "framer-motion";
+
 
 type ComponentState = {
 	active: boolean;
@@ -55,6 +57,7 @@ subiri(1000)
 
 	// Auto-scroll output to bottom
 	useEffect(() => {
+		setLoop(true);
 		if (outputRef.current) {
 			outputRef.current.scrollTop = outputRef.current.scrollHeight;
 		}
@@ -130,7 +133,7 @@ subiri(1000)
 			}
 		});
 	};
-	const runProgram = async () => {
+	const startProgram = async () => {
 		if (programStateRef.current === "running") return;
 
 		setProgramState("running");
@@ -226,9 +229,9 @@ subiri(1000)
 				{/* Mhariri wa Msimbo */}
 				<Card className="flex border-[2px] flex-col  border-accent dark:bg-slate-900">
 					<CardContent className="flex h-fit flex-col p-4">
-						<h3 className="text-lg font-medium">Hariri</h3>
-
-						<div className="mb-4 flex items-center justify-between">
+						<div className="mb-2 flex items-center justify-between">
+							<h3 className="text-lg font-medium">Hariri</h3>
+							
 							<div className="flex items-center gap-2">
 								<Button
 									onClick={() => {
@@ -242,12 +245,38 @@ subiri(1000)
 									}}
 									disabled={programState === "running"}
 									size="sm"
-									variant="outline"
+									variant="secondary"
 									className="flex items-center gap-2"
 								>
-									{codeCleared ? "Onyesha Mfano" : "Safisha"}
+									{codeCleared ?  <LightbulbIcon size={16} />:  <Paintbrush size={16} />}
 								</Button>
+								
+								<Button
+									onClick={ () =>  {
+
+										if(programState == "running"){
+											stopProgram();
+										resetComponents();	
+										}
+										else if(programState == "idle"){
+											resetComponents();
+											startProgram();
+
+										}
+										
+									}}
+									size="sm"
+									className="flex items-center gap-2 animate-[logo-pulse_1.5s_ease-in-out_infinite]"
+									variant={ programState =="running" ? "destructive" : "default"}
+								>
+									{programState === "running" ?  <Square className="animate-pulse" size={16} /> : <Play size={16} />}
+								</Button>
+								
 							</div>
+						</div>
+
+						<div className="mb-4 flex items-center justify-between">
+						
 							<div className="flex items-center gap-2">
 								{/* <label
 									className={`flex select-none items-center gap-1 text-xs ${programState === "running" ? "text-slate-400 dark:text-slate-500" : ""}`}
@@ -261,26 +290,7 @@ subiri(1000)
 									/>
 									Rudiarudia (loop)
 								</label> */}
-								<Button
-									onClick={runProgram}
-									disabled={programState === "running"}
-									size="sm"
-									className="flex items-center gap-2"
-								>
-									{programState === "running" ? " ..." : <Play size={16} />}
-								</Button>
-								<Button
-									onClick={() => {
-										stopProgram();
-										resetComponents();
-									}}
-									disabled={programState !== "running"}
-									size="sm"
-									variant="destructive"
-									className="flex items-center gap-2"
-								>
-									<Square size={16} />
-								</Button>
+								
 							</div>
 						</div>
 

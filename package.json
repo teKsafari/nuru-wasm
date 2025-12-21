@@ -12,6 +12,7 @@
 		"replace": "cd wasm && cp ./modified/* ./vendor/github.com/NuruProgramming/Nuru/evaluator/"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Nehemiah Kaaya",
+	"email": "heracraft@teksafari.org",
 	"license": "ISC"
 }

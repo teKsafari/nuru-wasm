@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <defs>
+    <linearGradient id="fireGradient" x1="16" y1="0" x2="16" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff9900"></stop>
+      <stop offset="1" stop-color="#00b4d8"></stop>
+    </linearGradient>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      #bottom-flame { fill: #00b4d8; }
+      #top-flame { fill: #ff9900; }
+    }
+    @media (prefers-color-scheme: light) {
+      #bottom-flame { fill: #00b4d8; }
+      #top-flame { fill: #ff9900; }
+    }
+  </style></defs>
+  <g transform="translate(0,2) scale(1,0.85)">
+    <path d="M16 12C16 12 23 17 23 22C23 27 19 30 16 30C13 30 9 27 9 22C9 17 16 12 16 12Z" fill="#00b4d8" id="bottom-flame"></path>
+    <path d="M16 2C16 2 19 6 19 8C19 10 16 12 16 12C16 12 13 10 13 8C13 6 16 2 16 2Z" fill="#ff9900" id="top-flame"></path>
+    <path d="M16 5C16 5 21 10 22 13C23 16 18 22 16 25C14 22 9 16 10 13C11 10 16 5 16 5Z" fill="url(#fireGradient)" id="middle-flame"></path>
+    <path d="M16 17C19 19 21 22 19 25C18 27 17 28 16 28C15 28 14 27 13 25C11 22 13 19 16 17Z" fill="#fff" opacity="0.3" id="highlight"></path>
+  </g>
+  <ellipse cx="16" cy="30.5" rx="10" ry="2" fill="#222" opacity="0.25"></ellipse>
+</svg>

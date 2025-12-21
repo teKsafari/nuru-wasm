@@ -1,4 +1,4 @@
-import ElectronicsSimulator from "@/components/electronics-simulator";
+import ElectronicsSimulator from "@/components/(electronics)/electronics-simulator";
 
 export default function ElectronicsPage() {
   return (

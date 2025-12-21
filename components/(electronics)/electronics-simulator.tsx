@@ -27,29 +27,14 @@ export default function ElectronicsSimulator() {
 
 	// Msimbo wa programu
 
-	const exampleCode = `// Mfano: kawasha na kuzima vifaa vyote
+	const exampleCode = `// Mfano:
 
 washa(1)
-subiri(200)
-washa(2)
-subiri(200)
-washa(3)
-subiri(200)
-washa(4)
-subiri(200)
-washa(5)
-subiri(200)
-
+subiri(1000)
 zima(1)
-subiri(200)
-zima(2)
-subiri(200)
-zima(3)
-subiri(200)
-zima(4)
-subiri(200)
-zima(5)
-subiri(200)
+subiri(1000)
+
+
     
     `;
 
@@ -75,7 +60,10 @@ subiri(200)
 		}
 	}, [output]);
 
-	const addOutput = (message: string, type: "info" | "error" | "success" = "info") => {
+	const addOutput = (
+		message: string,
+		type: "info" | "error" | "success" = "info",
+	) => {
 		const timestamp = new Date().toLocaleTimeString();
 		const prefix = type === "error" ? "❌" : type === "success" ? "✅" : "ℹ️";
 		setOutput((prev) => [...prev, `[${timestamp}] ${prefix} ${message}`]);
@@ -98,8 +86,15 @@ subiri(200)
 			if (washaMatch) {
 				const componentIndex = Number.parseInt(washaMatch[1]) - 1;
 				if (componentIndex >= 0 && componentIndex < components.length) {
-					setComponents((prev) => prev.map((comp, i) => (i === componentIndex ? { ...comp, active: true } : comp)));
-					addOutput(`Kifaa nambari ${componentIndex + 1} kimewashwa`, "success");
+					setComponents((prev) =>
+						prev.map((comp, i) =>
+							i === componentIndex ? { ...comp, active: true } : comp,
+						),
+					);
+					addOutput(
+						`Kifaa nambari ${componentIndex + 1} kimewashwa`,
+						"success",
+					);
 					resolve();
 				} else {
 					const errorMsg = `Nambari ya kifaa si sahihi: ${componentIndex + 1}`;
@@ -109,7 +104,11 @@ subiri(200)
 			} else if (zimaMatch) {
 				const componentIndex = Number.parseInt(zimaMatch[1]) - 1;
 				if (componentIndex >= 0 && componentIndex < components.length) {
-					setComponents((prev) => prev.map((comp, i) => (i === componentIndex ? { ...comp, active: false } : comp)));
+					setComponents((prev) =>
+						prev.map((comp, i) =>
+							i === componentIndex ? { ...comp, active: false } : comp,
+						),
+					);
 					addOutput(`Kifaa nambari ${componentIndex + 1} kimezimwa`, "success");
 					resolve();
 				} else {
@@ -221,14 +220,15 @@ subiri(200)
 	};
 
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-screen max-h-screen p-4">
+		<div className="grid h-screen max-h-screen grid-cols-1 gap-6 p-4 lg:grid-cols-2">
 			{/* Upande wa Kushoto - Mhariri wa Msimbo na Terminal */}
-			<div className="flex flex-col gap-4 h-full ">
+			<div className="fit mb-2 flex h-svh flex-col justify-start gap-4 border-2">
 				{/* Mhariri wa Msimbo */}
-				<Card className="flex-1 border-[1px] border-accent dark:bg-slate-900">
-					<CardContent className="p-4 h-full flex flex-col">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="text-lg font-medium">Hariri</h3>
+				<Card className="flex h-[45%] flex-col border-[1px] border-accent dark:bg-slate-900">
+					<CardContent className="flex h-full flex-col p-4">
+						<h3 className="text-lg font-medium">Hariri</h3>
+
+						<div className="mb-4 flex items-center justify-between">
 							<div className="flex items-center gap-2">
 								<Button
 									onClick={() => {
@@ -248,12 +248,25 @@ subiri(200)
 									{codeCleared ? "Onyesha Mfano" : "Safisha"}
 								</Button>
 							</div>
-							<div className="flex gap-2 items-center">
-								<label className={`flex items-center gap-1 text-xs select-none ${programState === "running" ? "text-slate-400 dark:text-slate-500" : ""}`}>
-									<input type="checkbox" checked={loop} onChange={(e) => setLoop(e.target.checked)} className="accent-blue-600" disabled={programState === "running"} />
+							<div className="flex items-center gap-2">
+								{/* <label
+									className={`flex select-none items-center gap-1 text-xs ${programState === "running" ? "text-slate-400 dark:text-slate-500" : ""}`}
+								>
+									<input
+										type="checkbox"
+										checked={loop}
+										onChange={(e) => setLoop(e.target.checked)}
+										className="accent-blue-600"
+										disabled={programState === "running"}
+									/>
 									Rudiarudia (loop)
-								</label>
-								<Button onClick={runProgram} disabled={programState === "running"} size="sm" className="flex items-center gap-2">
+								</label> */}
+								<Button
+									onClick={runProgram}
+									disabled={programState === "running"}
+									size="sm"
+									className="flex items-center gap-2"
+								>
 									{programState === "running" ? " ..." : <Play size={16} />}
 								</Button>
 								<Button
@@ -271,14 +284,14 @@ subiri(200)
 							</div>
 						</div>
 
-						<div className="flex-1 relative">
+						<div className="relative flex-1">
 							<Textarea
 								value={code}
 								onChange={(e) => {
 									setCode(e.target.value);
 									setCodeCleared(e.target.value === "");
 								}}
-								className="font-mono text-sm h-full resize-none bg-slate-50 dark:bg-background"
+								className="h-full resize-none bg-slate-50 font-mono text-sm dark:bg-background"
 								placeholder="Andika programu yako ya elektroniki hapa..."
 								disabled={programState === "running"}
 							/>
@@ -286,7 +299,7 @@ subiri(200)
 							{/* Angazia mstari wa sasa wa utekelezaji */}
 							{currentLine >= 0 && (
 								<div
-									className="absolute left-0 right-0 bg-yellow-200 opacity-30 pointer-events-none"
+									className="pointer-events-none absolute left-0 right-0 bg-yellow-200 opacity-30"
 									style={{
 										top: `${currentLine * 1.5}rem`,
 										height: "1.5rem",
@@ -296,8 +309,8 @@ subiri(200)
 						</div>
 
 						{programState === "running" && (
-							<div className="mt-2 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
-								<div className="w-2 h-2 bg-blue-600 dark:bg-blue-400 rounded-full animate-pulse" />
+							<div className="mt-2 flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+								<div className="h-2 w-2 animate-pulse rounded-full bg-blue-600 dark:bg-blue-400" />
 								Programu inaendelea... (Mstari {currentLine + 1})
 							</div>
 						)}
@@ -306,20 +319,36 @@ subiri(200)
 
 				{/* Terminal */}
 				<Card className="h-80 border-[1px] dark:bg-slate-900">
-					<CardContent className="p-4 h-full flex flex-col">
-						<div className="flex items-center justify-between mb-2">
+					<CardContent className="flex h-full flex-col p-4">
+						<div className="mb-2 flex items-center justify-between">
 							<h3 className="text-lg font-medium">Terminali</h3>
 							<Button onClick={clearOutput} size="sm" variant="outline">
 								Futa
 							</Button>
 						</div>
 
-						<div ref={outputRef} className="bg-slate-100 dark:bg-slate-950 dark:text-slate-100 p-3 rounded-lg flex-1 overflow-y-auto font-mono text-sm mb-4">
+						<div
+							ref={outputRef}
+							className="mb-4 flex-1 overflow-y-auto rounded-lg bg-slate-100 p-3 font-mono text-sm dark:bg-slate-950 dark:text-slate-100"
+						>
 							{output.length === 0 ? (
-								<div className="text-slate-500 dark:text-slate-400 italic">Matokeo yataonekana hapa...</div>
+								<div className="italic text-slate-500 dark:text-slate-400">
+									Matokeo yataonekana hapa...
+								</div>
 							) : (
 								output.map((line, i) => (
-									<div key={i} className={line.includes("❌") ? "text-red-400 dark:text-red-400" : line.includes("✅") ? "text-green-400 dark:text-green-400" : line.includes("🚀") || line.includes("✨") ? "text-blue-400 dark:text-blue-300" : ""}>
+									<div
+										key={i}
+										className={
+											line.includes("❌")
+												? "text-red-400 dark:text-red-400"
+												: line.includes("✅")
+													? "text-green-400 dark:text-green-400"
+													: line.includes("🚀") || line.includes("✨")
+														? "text-blue-400 dark:text-blue-300"
+														: ""
+										}
+									>
 										{line}
 									</div>
 								))
@@ -327,7 +356,7 @@ subiri(200)
 						</div>
 
 						{error && (
-							<div className="flex items-center gap-2 text-red-500 dark:text-red-400 mb-2 text-sm">
+							<div className="mb-2 flex items-center gap-2 text-sm text-red-500 dark:text-red-400">
 								<AlertCircle size={16} />
 								<span>{error}</span>
 							</div>
@@ -340,7 +369,14 @@ subiri(200)
 							}}
 							className="flex gap-2"
 						>
-							<Input ref={commandInputRef} value={command} onChange={(e) => setCommand(e.target.value)} placeholder="Amri ya moja kwa moja (mf. washa(1))" className="font-mono text-sm" disabled={programState === "running"} />
+							<Input
+								ref={commandInputRef}
+								value={command}
+								onChange={(e) => setCommand(e.target.value)}
+								placeholder="Amri ya moja kwa moja (mf. washa(1))"
+								className="font-mono text-sm"
+								disabled={programState === "running"}
+							/>
 							<Button type="submit" disabled={programState === "running"}>
 								Tekeleza
 							</Button>
@@ -350,10 +386,10 @@ subiri(200)
 			</div>
 
 			{/* Upande wa Kulia - Vifaa vya Elektroniki */}
-			<Card className="max-w-md w-full border-[1px] dark:bg-slate-900">
-				<CardContent className="p-6 h-full">
-					<h3 className="text-lg font-medium mb-4">Vifaa vya Elektroniki</h3>
-					<div className="mb-20 text-sm text-muted-foreground">
+			<Card className="w-full max-w-md border-[2px] dark:bg-slate-900">
+				<CardContent className="h-full p-6">
+					<h3 className="mb-4 text-lg font-medium">Vifaa vya Elektroniki</h3>
+					<div className="mb-2 text-sm text-muted-foreground md:mb-20">
 						<div className="font-medium">Nambari za Vifaa:</div>
 						<div>1: LED Nyekundu</div>
 						<div>2: LED ya Kijani</div>
@@ -361,17 +397,17 @@ subiri(200)
 						<div>4: Buzzer</div>
 						<div>5: Motor</div>
 					</div>
-					<div className="border-[1px] border-accent rounded-lg p-8 flex items-center justify-center bg-slate-50 dark:bg-background">
+					<div className="flex items-center justify-center rounded-lg border-[1px] border-accent bg-slate-50 p-8 dark:bg-background">
 						<div className="flex flex-col items-center">
 							<div className="grid grid-cols-1 gap-12">
 								{/* LED */}
-								<div className="flex justify-center items-center gap-8">
+								<div className="flex items-center justify-center gap-8">
 									<LED active={components[0].active} color="red" label="1" />
 									<LED active={components[1].active} color="green" label="2" />
 									<LED active={components[2].active} color="blue" label="3" />
 								</div>
 								{/* Buzzer na Motor */}
-								<div className="flex justify-center items-center gap-16">
+								<div className="flex items-center justify-center gap-16">
 									<Buzzer active={components[3].active} label="4" />
 									<Motor active={components[4].active} label="5" />
 								</div>
@@ -380,12 +416,25 @@ subiri(200)
 					</div>
 				</CardContent>
 			</Card>
+
+			{/* i am only smart enough to know my implementation is 
+			sub-optimal, but too dumb to know better... if you are reading this, 
+			chances are you know your shit, so please help */}
+			<div className="h-20"></div> 
 		</div>
 	);
 }
 
 // LED Component
-function LED({ active, color, label }: { active: boolean; color: string; label: string }) {
+function LED({
+	active,
+	color,
+	label,
+}: {
+	active: boolean;
+	color: string;
+	label: string;
+}) {
 	const ledColors = {
 		red: {
 			off: "bg-red-200 dark:bg-red-950",
@@ -408,10 +457,17 @@ function LED({ active, color, label }: { active: boolean; color: string; label: 
 
 	return (
 		<div className="flex flex-col items-center">
-			<motion.div className={`w-12 h-12 rounded-full flex items-center justify-center ${active ? colorConfig.on : colorConfig.off} ${active ? colorConfig.glow : ""} transition-colors`} initial={{ scale: 1 }} animate={{ scale: active ? [1, 1.05, 1] : 1 }} transition={{ duration: 0.3 }}>
+			<motion.div
+				className={`flex h-12 w-12 items-center justify-center rounded-full ${active ? colorConfig.on : colorConfig.off} ${active ? colorConfig.glow : ""} transition-colors`}
+				initial={{ scale: 1 }}
+				animate={{ scale: active ? [1, 1.05, 1] : 1 }}
+				transition={{ duration: 0.3 }}
+			>
 				<span className="text-xs font-bold text-white opacity-70">{label}</span>
 			</motion.div>
-			<div className="text-xs mt-1 text-slate-600 dark:text-slate-400">{color.toUpperCase()}</div>
+			<div className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+				{color.toUpperCase()}
+			</div>
 		</div>
 	);
 }
@@ -426,7 +482,9 @@ function Buzzer({ active, label }: { active: boolean; label: string }) {
 		// Initialize audio context on first render
 		if (!audioContextRef.current) {
 			try {
-				audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+				audioContextRef.current = new (window.AudioContext ||
+					(window as unknown as { webkitAudioContext: typeof AudioContext })
+						.webkitAudioContext)();
 			} catch {
 				console.warn("Web Audio API not supported");
 			}
@@ -445,7 +503,10 @@ function Buzzer({ active, label }: { active: boolean; label: string }) {
 				const gainNode = audioContextRef.current.createGain();
 
 				// Set buzzer frequency (800Hz is a typical buzzer frequency)
-				oscillator.frequency.setValueAtTime(1200, audioContextRef.current.currentTime);
+				oscillator.frequency.setValueAtTime(
+					1200,
+					audioContextRef.current.currentTime,
+				);
 				oscillator.type = "sine"; // Square wave for buzzer-like sound
 
 				// Set volume (start low to avoid being too loud)
@@ -458,7 +519,7 @@ function Buzzer({ active, label }: { active: boolean; label: string }) {
 				// Start the sound
 				oscillator.start();
 
-				// Store references for cleanup
+				//  re references for cleanup
 				oscillatorRef.current = oscillator;
 				gainNodeRef.current = gainNode;
 			} catch (error) {
@@ -492,16 +553,20 @@ function Buzzer({ active, label }: { active: boolean; label: string }) {
 	return (
 		<div className="flex flex-col items-center">
 			<motion.div
-				className={`w-20 h-20 rounded-full bg-slate-800 dark:bg-slate-900 border-4 ${active ? "border-yellow-400" : "border-slate-600 dark:border-slate-700"} flex items-center justify-center relative`}
+				className={`h-20 w-20 rounded-full border-4 bg-slate-800 dark:bg-slate-900 ${active ? "border-yellow-400" : "border-slate-600 dark:border-slate-700"} relative flex items-center justify-center`}
 				animate={active ? { rotate: [0, 5, -5, 0] } : {}}
 				transition={{
 					repeat: active ? Number.POSITIVE_INFINITY : 0,
 					duration: 0.2,
 				}}
 			>
-				<span className="text-xs font-bold text-white opacity-70 absolute top-1">{label}</span>
-				<div className="w-10 h-10 rounded-full bg-slate-700 dark:bg-slate-800 flex items-center justify-center">
-					<div className={`w-6 h-6 rounded-full ${active ? "bg-yellow-400" : "bg-slate-600 dark:bg-slate-700"}`}></div>
+				<span className="absolute top-1 text-xs font-bold text-white opacity-70">
+					{label}
+				</span>
+				<div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700 dark:bg-slate-800">
+					<div
+						className={`h-6 w-6 rounded-full ${active ? "bg-yellow-400" : "bg-slate-600 dark:bg-slate-700"}`}
+					></div>
 				</div>
 
 				{active && (
@@ -539,7 +604,9 @@ function Buzzer({ active, label }: { active: boolean; label: string }) {
 					</>
 				)}
 			</motion.div>
-			<div className="text-xs mt-1 text-slate-600 dark:text-slate-400">BUZZER</div>
+			<div className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+				BUZZER
+			</div>
 		</div>
 	);
 }
@@ -556,7 +623,9 @@ function Motor({ active, label }: { active: boolean; label: string }) {
 		// Handle motor stopping
 		if (prevActiveRef.current && !active) {
 			// Capture the exact rotation at stop time
-			const element = document.querySelector(`[data-motor-id="${label}"]`) as HTMLElement;
+			const element = document.querySelector(
+				`[data-motor-id="${label}"]`,
+			) as HTMLElement;
 			if (element) {
 				const transform = element.style.transform;
 				if (transform) {
@@ -576,23 +645,29 @@ function Motor({ active, label }: { active: boolean; label: string }) {
 	return (
 		<div className="flex flex-col items-center">
 			<motion.div className="relative">
-				<span className="text-xs font-bold text-slate-500 dark:text-slate-400 absolute -top-6 left-1/2 -translate-x-1/2">{label}</span>
+				<span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-bold text-slate-500 dark:text-slate-400">
+					{label}
+				</span>
 
 				{/* Motor Base */}
-				<div className={`w-24 h-16 bg-slate-700 dark:bg-slate-800 rounded-lg flex items-center justify-center relative ${active ? "ring-2 ring-blue-400 ring-opacity-70" : ""}`}>
+				<div
+					className={`relative flex h-16 w-24 items-center justify-center rounded-lg bg-slate-700 dark:bg-slate-800 ${active ? "ring-2 ring-blue-400 ring-opacity-70" : ""}`}
+				>
 					<div className="absolute inset-0 flex items-center justify-center">
-						<div className="w-10 h-10 rounded-full bg-slate-800 dark:bg-slate-900 flex items-center justify-center z-10">
-							<div className="w-2 h-2 rounded-full bg-slate-600 dark:bg-slate-700"></div>
+						<div className="z-10 flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 dark:bg-slate-900">
+							<div className="h-2 w-2 rounded-full bg-slate-600 dark:bg-slate-700"></div>
 						</div>
 					</div>
 
 					{/* Motor Shaft with enhanced spinning */}
 					<motion.div
-						className="w-16 h-16 absolute"
+						className="absolute h-16 w-16"
 						data-motor-id={label}
 						initial={{ rotate: rotationRef.current }}
 						animate={{
-							rotate: active ? [rotationRef.current, rotationRef.current + 360] : rotationRef.current,
+							rotate: active
+								? [rotationRef.current, rotationRef.current + 360]
+								: rotationRef.current,
 							scale: active ? [1, 1.03, 1] : 1,
 						}}
 						transition={{
@@ -608,14 +683,17 @@ function Motor({ active, label }: { active: boolean; label: string }) {
 							},
 						}}
 					>
-						<div className="absolute top-1/2 left-1/2 w-1 h-8 bg-slate-400 dark:bg-slate-300 -translate-x-1/2 -translate-y-1/2"></div>
-						<div className="absolute top-1/2 left-1/2 w-8 h-1 bg-slate-400 dark:bg-slate-300 -translate-x-1/2 -translate-y-1/2"></div>
+						<div className="absolute left-1/2 top-1/2 h-8 w-1 -translate-x-1/2 -translate-y-1/2 bg-slate-400 dark:bg-slate-300"></div>
+						<div className="absolute left-1/2 top-1/2 h-1 w-8 -translate-x-1/2 -translate-y-1/2 bg-slate-400 dark:bg-slate-300"></div>
 
 						{/* Circular sector marker to visualize rotation */}
-						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-							<div className="relative w-10 h-10">
+						<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+							<div className="relative h-10 w-10">
 								{/* Sector marker */}
-								<div className="absolute w-4 h-4 bg-yellow-300 rounded-sm" style={{ top: "0px", left: "3px" }}></div>
+								<div
+									className="absolute h-4 w-4 rounded-sm bg-yellow-300"
+									style={{ top: "0px", left: "3px" }}
+								></div>
 							</div>
 						</div>
 					</motion.div>
@@ -636,10 +714,16 @@ function Motor({ active, label }: { active: boolean; label: string }) {
 				</div>
 
 				{/* Motor Terminals */}
-				<div className={`absolute -bottom-2 left-0 w-4 h-4 ${active ? "bg-red-600" : "bg-red-500 dark:bg-red-700"} rounded-full border-2 border-slate-700 dark:border-slate-800`}></div>
-				<div className={`absolute -bottom-2 right-0 w-4 h-4 ${active ? "bg-blue-600" : "bg-blue-500 dark:bg-blue-700"} rounded-full border-2 border-slate-700 dark:border-slate-800`}></div>
+				<div
+					className={`absolute -bottom-2 left-0 h-4 w-4 ${active ? "bg-red-600" : "bg-red-500 dark:bg-red-700"} rounded-full border-2 border-slate-700 dark:border-slate-800`}
+				></div>
+				<div
+					className={`absolute -bottom-2 right-0 h-4 w-4 ${active ? "bg-blue-600" : "bg-blue-500 dark:bg-blue-700"} rounded-full border-2 border-slate-700 dark:border-slate-800`}
+				></div>
 			</motion.div>
-			<div className="text-xs mt-1 text-slate-600 dark:text-slate-400">MOTOR</div>
+			<div className="mt-1 text-xs text-slate-600 dark:text-slate-400">
+				MOTOR
+			</div>
 		</div>
 	);
 }

@@ -1,12 +1,38 @@
-./Nuru/*
-./Nuru/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Ignore binary files
-main
-main.exe
+# Dependencies
+node_modules
+.pnp
+.pnp.js
 
-# Ingore built wasm bianry in the wasm directory
-wasm/main.wasm
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Ignore vendor directory
-/wasm/vendor/*
+# Testing
+coverage
+
+# Turbo
+.turbo
+
+# Vercel
+.vercel
+
+# Build Outputs
+.next/
+out/
+build
+dist
+
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+*.pem

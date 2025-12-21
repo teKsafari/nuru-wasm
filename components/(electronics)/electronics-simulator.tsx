@@ -222,10 +222,10 @@ subiri(1000)
 	return (
 		<div className="grid h-screen max-h-screen grid-cols-1 gap-6 p-4 lg:grid-cols-2">
 			{/* Upande wa Kushoto - Mhariri wa Msimbo na Terminal */}
-			<div className="fit mb-2 flex h-svh flex-col justify-start gap-4 border-2">
+			<div className="fit mb-2 flex  flex-col justify-start gap-4 ">
 				{/* Mhariri wa Msimbo */}
-				<Card className="flex h-[45%] flex-col border-[1px] border-accent dark:bg-slate-900">
-					<CardContent className="flex h-full flex-col p-4">
+				<Card className="flex border-[2px] flex-col  border-accent dark:bg-slate-900">
+					<CardContent className="flex h-fit flex-col p-4">
 						<h3 className="text-lg font-medium">Hariri</h3>
 
 						<div className="mb-4 flex items-center justify-between">
@@ -291,7 +291,7 @@ subiri(1000)
 									setCode(e.target.value);
 									setCodeCleared(e.target.value === "");
 								}}
-								className="h-full resize-none bg-slate-50 font-mono text-sm dark:bg-background"
+								className="h-[30vh] resize-none bg-slate-50 font-mono text-sm dark:bg-background"
 								placeholder="Andika programu yako ya elektroniki hapa..."
 								disabled={programState === "running"}
 							/>
@@ -318,7 +318,7 @@ subiri(1000)
 				</Card>
 
 				{/* Terminal */}
-				<Card className="h-80 border-[1px] dark:bg-slate-900">
+				<Card className="h-80 border-[2px] dark:bg-slate-900">
 					<CardContent className="flex h-full flex-col p-4">
 						<div className="mb-2 flex items-center justify-between">
 							<h3 className="text-lg font-medium">Terminali</h3>
@@ -329,8 +329,8 @@ subiri(1000)
 
 						<div
 							ref={outputRef}
-							className="mb-4 flex-1 overflow-y-auto rounded-lg bg-slate-100 p-3 font-mono text-sm dark:bg-slate-950 dark:text-slate-100"
-						>
+							className="mb-4 flex-1 border-[1px] border-accent overflow-y-auto rounded-lg bg-slate-100 p-3 font-mono text-sm dark:bg-slate-950 dark:text-slate-100"
+						>	
 							{output.length === 0 ? (
 								<div className="italic text-slate-500 dark:text-slate-400">
 									Matokeo yataonekana hapa...
@@ -386,7 +386,7 @@ subiri(1000)
 			</div>
 
 			{/* Upande wa Kulia - Vifaa vya Elektroniki */}
-			<Card className="w-full max-w-md border-[2px] dark:bg-slate-900">
+			<Card className="w-full border-[2px] dark:bg-slate-900">
 				<CardContent className="h-full p-6">
 					<h3 className="mb-4 text-lg font-medium">Vifaa vya ki-Elektroniki</h3>
 		

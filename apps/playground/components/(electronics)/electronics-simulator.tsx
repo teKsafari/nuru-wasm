@@ -683,7 +683,6 @@ function Motor({ active, label }: { active: boolean; label: string }) {
 								repeat: active ? Number.POSITIVE_INFINITY : 0,
 								duration: active ? 0.5 : 0,
 								ease: "linear",
-								immediateRender: true,
 							},
 							scale: {
 								repeat: Number.POSITIVE_INFINITY,

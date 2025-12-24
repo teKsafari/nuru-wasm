@@ -1,99 +1,142 @@
-A web interpreter for [Nuru](https://github.com/NuruProgramming/Nuru) -- A Swahili Programming Language built from the ground up -- powered by WebAssembly.  
+# @nuru/wasm
 
-### Getting started
+A high-performance WebAssembly (Wasm) interpreter for [Nuru](https://github.com/NuruProgramming/Nuru) — a Swahili-based programming language. This package enables Nuru code to run directly in the browser, powering the [Nuru Playground](https://github.com/Heracraft/nuru-playground) and other web-based Nuru tools.
 
-**Prerequisites**
-+ Go (^1.19.0)
-+ Node.js (^18.13)
-+ pnpm
+## 🚀 Overview
+
+This project compiles the core Go-based Nuru interpreter into WebAssembly, allowing it to interface with JavaScript. It bridges the gap between Nuru's backend logic and frontend applications, providing a seamless execution environment on the web.
+
+## ✨ Features
+
+- **In-Browser Execution**: Run Nuru code client-side without a backend server.
+- **JavaScript Interop**: Simple API to send code to the interpreter and receive output.
+- **Custom Builtins**: Modified built-in functions optimized for the browser environment (e.g., handling input/output).
+
+## 🛠️ Prerequisites
+
+To build and develop this package, you need:
+
+- **Go**: version 1.19.0 or higher
+- **Node.js**: version 18.13 or higher
+- **pnpm**: Package manager
 
 ```shell
 # Install pnpm if not already installed
 npm install -g pnpm
 ```
 
-#### Working with the Wasm Interpreter
-To build the wasm binary from the go interpreter: 
+## 📦 Installation & Setup
 
-1. Change directories to `/wasm`
+> **Note:** This project is part of a monorepo managed by [Turborepo](https://turbo.build/). Use `turbo run <process>` from the root directory to execute tasks (e.g., `turbo run build:wasm`, `turbo run test`). This ensures proper caching and dependency management.
 
-```shell
-cd wasm
-```
+1. **Navigate to the package directory:**
+   ```bash
+   cd packages/nuru-wasm
+   ```
 
-2. Install the required go dependencies
-   
-``` shell
+2. **Install Go dependencies:**
+   ```bash
    go mod tidy
-```
+   ```
 
-3. Create a go vendor folder
-```shell
-go mod vendor
-```
+3. **Vendor the dependencies:**
+   We use vendoring to allow us to inject modified core files.
+   ```bash
+   go mod vendor
+   ```
 
-and copy the modified `builtins.go` into the evaluator package
+4. **Apply Custom Modifications:**
+   Copy the browser-optimized `builtins.go` into the vendored Nuru evaluator package. This is critical for capturing output in the browser.
 
-```shell
-cp ./modified/builtins.go ./vendor/github.com/NuruProgramming/Nuru/evaluator/
-```
+   **macOS / Linux:**
+   ```bash
+   cp ./modified/builtins.go ./vendor/github.com/NuruProgramming/Nuru/evaluator/
+   ```
 
-or if you are on **Windows**
+   **Windows:**
+   ```powershell
+   copy ./modified/builtins.go ./vendor/github.com/NuruProgramming/Nuru/evaluator/
+   ```
 
-```shell
-copy ./modified/builtins.go ./vendor/github.com/NuruProgramming/Nuru/evaluator/
-```
+## 🏗️ Building the WASM Binary
 
-4. To build the wasm binary
-
-```shell
-wasm && GOOS=js GOARCH=wasm go build -mod=vendor -o main.wasm
-```
-
-or if you are on **Windows**:
-
-```shell
-$env:GOOS="js"; $env:GOARCH="wasm"; go build -mod=vendor -o main.wasm
-```
-
-> notice the `-mod=vendor` flag in the wasm build. This is to build the project using the vendored dependencies (which now includes the modified builtins).
-
-#### Web app
-Powered by [Svelte](https://svelte.dev/). To work with it:
-
-1. Change directories to `/app`
-   
-```shell
-   cd app
-```
-
-2. Install dependencies
-
-```shell
-npm i
-```
-
-3. To start a development server:
+To compile the Go code into a `.wasm` binary:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-
-npm run dev -- --open
+GOOS=js GOARCH=wasm go build -mod=vendor -o main.wasm
 ```
 
-#### Workspace scripts
-[/package.json](https://github.com/Heracraft/nuru-playground/blob/main/package.json#L6) redefines the above commands as scripts you can run from the root folder.
+This generates a `main.wasm` file. For the playground app, this file is typically copied to the static assets folder:
 
-```shell
-npm run dev #runs the dev server
-npm run build:wasm #Builds the wasm binary and copies it over to the web app
-npm run replace #Replaces the default Nuru builtins with browser friendly versions
+```bash
+cp main.wasm ../../apps/nuru-svelte/static/
 ```
 
-> If you are on windows, edit the [build:wasm](https://github.com/Heracraft/nuru-playground/blob/main/package.json#L11C18-L11C101) & [replace](https://github.com/Heracraft/nuru-playground/blob/main/package.json#L12) scripts to replace `cp` with `copy` or `Copy-Item`
+> **Note:** The `-mod=vendor` flag is essential to ensure the build uses our modified `builtins.go`.
 
-**Coming soon**
-- [x] Support for user inputs (`jaza()`)
-- [ ] Syntax highlighting for Nuru code
+## 💻 JavaScript API
+
+When loaded in a browser environment (requires `wasm_exec.js` from the Go distribution), this module exposes the following global API:
+
+### `window.runCode(code)`
+executes Nuru source code.
+
+- **Arguments**:
+  - `code` (string): The Nuru source code to execute.
+- **Returns**: `null`
+
+### `window.nuruOutputReceiver(text, isError)`
+**Required Callback**. You MUST define this function in the global scope (`window`) before running any code. The WASM module calls this function to emit output.
+
+- **Arguments**:
+  - `text` (string): The output text from the interpreter.
+  - `isError` (boolean): `true` if the message is an error, `false` otherwise.
+
+**Example Usage:**
+
+```javascript
+// 1. Define the receiver
+window.nuruOutputReceiver = (text, isError) => {
+    if (isError) {
+        console.error("Nuru Error:", text);
+    } else {
+        console.log("Nuru Output:", text);
+    }
+};
+
+// 2. Load the WASM (using standard Go WASM loader)
+const go = new Go();
+WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject).then((result) => {
+    go.run(result.instance);
+    
+    // 3. Run code
+    window.runCode("andika(\"Hujambo Dunia!\")"); // Prints "Hujambo Dunia!"
+});
+```
+
+## 📜 Scripts
+
+This project is part of a monorepo managed by **Turborepo**. You should run scripts from the **root of the monorepo** using specific filters or let turbo handle dependencies automatically.
+
+### Common Commands
+
+- **Test**:
+  ```bash
+  turbo run test --filter=@nuru/wasm
+  ```
+
+- **Build WASM Binary**:
+  ```bash
+  turbo run build:wasm --filter=@nuru/wasm
+  ```
+
+- **Vendor Replacements**:
+  ```bash
+  turbo run replace --filter=@nuru/wasm
+  ```
+
+> Note: You can also interpret these as standard npm scripts (e.g. `npm run build:wasm`) inside this directory, but `turbo` is preferred for caching and dependency orchestration.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please ensure you run `go mod vendor` and re-apply the `modified/builtins.go` patch if you update dependencies.

@@ -135,7 +135,7 @@ This project is part of a monorepo managed by **Turborepo**. You should run scri
   turbo run replace --filter=@nuru/wasm
   ```
 
-> Note: You can also interpret these as standard npm scripts (e.g. `npm run build:wasm`) inside this directory, but `turbo` is preferred for caching and dependency orchestration.
+> Note: The underlying npm scripts (e.g. running `npm run build:wasm` from this package directory) will also work, but they bypass Turborepo's caching and cross-package orchestration. For consistent monorepo workflows, prefer running these commands via `turbo` from the repository root.
 
 ## 🤝 Contributing
 
